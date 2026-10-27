@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-10-21T09:37:18.335Z",
+  "target": ".",
+  "depth": "deep",
+  "type": "all",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 14,
+    "low": 0,
+    "total": 14
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "public\\build\\assets\\app-DWfBdUim.js:13",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "public\\build\\assets\\app-DWfBdUim.js:90",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "public\\build\\assets\\app-DWfBdUim.js:93",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\filp\\whoops\\src\\Whoops\\Resources\\js\\prism.js:3",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\filp\\whoops\\src\\Whoops\\Resources\\js\\prism.js:7",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\filp\\whoops\\src\\Whoops\\Resources\\js\\prism.js:8",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\filp\\whoops\\src\\Whoops\\Resources\\js\\zepto.min.js:2",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\phpunit\\php-code-coverage\\src\\Report\\Html\\Renderer\\Template\\js\\bootstrap.bundle.min.js:6",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\phpunit\\php-code-coverage\\src\\Report\\Html\\Renderer\\Template\\js\\d3.min.js:3",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\phpunit\\php-code-coverage\\src\\Report\\Html\\Renderer\\Template\\js\\jquery.min.js:2",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\phpunit\\php-code-coverage\\src\\Report\\Html\\Renderer\\Template\\js\\nv.d3.min.js:2",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\symfony\\error-handler\\Resources\\assets\\js\\exception.js:67",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\symfony\\error-handler\\Resources\\assets\\js\\exception.js:180",
+      "description": "XSS risk with innerHTML"
+    },
+    {
+      "severity": "medium",
+      "type": "innerHTML",
+      "location": "vendor\\symfony\\error-handler\\Resources\\assets\\js\\exception.js:219",
+      "description": "XSS risk with innerHTML"
+    }
+  ]
+}
