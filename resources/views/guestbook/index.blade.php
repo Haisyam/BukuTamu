@@ -224,7 +224,7 @@
                     <div class="flex items-center gap-2">
                         <h1 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">BUKU TAMU DIGITAL</h1>
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-100 text-orange-800 dark:bg-orange-950/80 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
-                            KIOSK
+                            Ekraf
                         </span>
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Pusat Pelayanan Terpadu Ekraf Majalengka</p>
