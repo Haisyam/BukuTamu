@@ -244,4 +244,34 @@ class GuestBookSystemTest extends TestCase
         $deleteRes->assertRedirect();
         $this->assertDatabaseMissing('divisions', ['id' => $div->id]);
     }
+
+    public function test_admin_can_update_email_and_password(): void
+    {
+        $page = $this->actingAs($this->admin)->get(route('admin.account.edit'));
+        $page->assertStatus(200)->assertSee('Pengaturan Akun');
+
+        // Wrong current password rejected for email update
+        $badEmailRes = $this->actingAs($this->admin)->put(route('admin.account.email.update'), [
+            'email' => 'admin.baru@bukutamu.com',
+            'current_password_email' => 'salah123',
+        ]);
+        $badEmailRes->assertSessionHasErrors('current_password_email', null, 'updateEmail');
+
+        // Valid email update
+        $okEmailRes = $this->actingAs($this->admin)->put(route('admin.account.email.update'), [
+            'email' => 'admin.baru@bukutamu.com',
+            'current_password_email' => 'password',
+        ]);
+        $okEmailRes->assertRedirect()->assertSessionHas('success');
+        $this->assertEquals('admin.baru@bukutamu.com', $this->admin->fresh()->email);
+
+        // Valid password update
+        $okPassRes = $this->actingAs($this->admin)->put(route('admin.account.password.update'), [
+            'current_password' => 'password',
+            'password' => 'passwordbaru123',
+            'password_confirmation' => 'passwordbaru123',
+        ]);
+        $okPassRes->assertRedirect()->assertSessionHas('success');
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('passwordbaru123', $this->admin->fresh()->password));
+    }
 }

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
@@ -55,4 +56,9 @@ Route::middleware('auth')->group(function () {
     // Divisions Management
     Route::resource('/divisions', DivisionController::class)->names('admin.divisions')->except(['create', 'show', 'edit']);
     Route::patch('/divisions/{division}/toggle', [DivisionController::class, 'toggle'])->name('admin.divisions.toggle');
+
+    // Admin Account Settings (Email & Password)
+    Route::get('/account', [AccountController::class, 'edit'])->name('admin.account.edit');
+    Route::put('/account/email', [AccountController::class, 'updateEmail'])->name('admin.account.email.update');
+    Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('admin.account.password.update');
 });

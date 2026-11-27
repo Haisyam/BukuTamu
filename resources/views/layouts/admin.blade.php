@@ -54,6 +54,15 @@
                 <span>Master Bagian</span>
             </a>
 
+            <!-- Account Settings -->
+            <a 
+                href="{{ route('admin.account.edit') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all {{ request()->routeIs('admin.account.*') ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Pengaturan Akun</span>
+            </a>
+
             <div class="pt-4 text-[11px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Tautan Luar</div>
 
             <!-- Public Kiosk Link -->
@@ -86,7 +95,7 @@
             </div>
 
             <div class="flex items-center justify-between gap-2 p-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
-                <div class="flex items-center gap-2.5 min-w-0">
+                <a href="{{ route('admin.account.edit') }}" class="flex items-center gap-2.5 min-w-0 hover:opacity-80 transition" title="Pengaturan Akun">
                     <div class="w-8 h-8 rounded-full bg-orange-600 text-white font-black text-xs flex items-center justify-center shrink-0">
                         {{ strtoupper(substr(auth()->user()->name ?? 'AD', 0, 2)) }}
                     </div>
@@ -94,7 +103,7 @@
                         <p class="text-xs font-black text-slate-900 dark:text-white truncate">{{ auth()->user()->name ?? 'Admin' }}</p>
                         <p class="text-[10px] text-slate-400 truncate">{{ auth()->user()->email ?? 'admin' }}</p>
                     </div>
-                </div>
+                </a>
 
                 <button 
                     type="button" 
@@ -169,6 +178,9 @@
                     </a>
                     <a href="{{ route('admin.divisions.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold {{ request()->routeIs('admin.divisions.*') ? 'bg-orange-600 text-white' : 'text-slate-700 dark:text-slate-200' }}">
                         <span>Master Bagian</span>
+                    </a>
+                    <a href="{{ route('admin.account.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold {{ request()->routeIs('admin.account.*') ? 'bg-orange-600 text-white' : 'text-slate-700 dark:text-slate-200' }}">
+                        <span>Pengaturan Akun</span>
                     </a>
                     <a href="{{ route('guestbook.index') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-orange-600">
                         <span>Layar Kiosk Publik ↗</span>
