@@ -77,11 +77,18 @@ class GuestBookController extends Controller
 
         Storage::disk('public')->put($filename, $decodedImage);
 
+        $socialMedia = GuestLog::normalizeSocialMedia(
+            $validated['social_media_platform'] ?? null,
+            $validated['social_media_handle'] ?? null
+        );
+
         // Security check 3: Sanitize all string fields against HTML/script injection
         $guestLog = GuestLog::create([
             'division_id' => $validated['division_id'],
             'name' => strip_tags(trim($validated['name'])),
             'phone' => preg_replace('/[^0-9+\-\s]/', '', trim($validated['phone'])),
+            'social_media_platform' => $socialMedia['platform'],
+            'social_media_handle' => $socialMedia['handle'],
             'institution' => strip_tags(trim($validated['institution'])),
             'person_to_meet' => !empty($validated['person_to_meet']) ? strip_tags(trim($validated['person_to_meet'])) : null,
             'purpose' => strip_tags(trim($validated['purpose'])),

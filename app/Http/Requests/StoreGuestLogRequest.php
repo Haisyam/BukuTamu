@@ -26,6 +26,8 @@ class StoreGuestLogRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:25'],
+            'social_media_platform' => ['nullable', 'string', 'in:instagram,tiktok,youtube'],
+            'social_media_handle' => ['nullable', 'string', 'max:100'],
             'institution' => ['required', 'string', 'max:150'],
             'division_id' => ['required', 'exists:divisions,id'],
             'person_to_meet' => ['nullable', 'string', 'max:150'],
@@ -46,6 +48,8 @@ class StoreGuestLogRequest extends FormRequest
             'name.max' => 'Nama lengkap maksimal 150 karakter.',
             'phone.required' => 'Nomor HP / WhatsApp wajib diisi.',
             'phone.max' => 'Nomor HP maksimal 25 karakter.',
+            'social_media_platform.in' => 'Platform sosial media harus berupa Instagram, TikTok, atau YouTube.',
+            'social_media_handle.max' => 'Username sosial media maksimal 100 karakter.',
             'institution.required' => 'Asal instansi / alamat / organisasi wajib diisi.',
             'institution.max' => 'Asal instansi maksimal 150 karakter.',
             'division_id.required' => 'Silakan pilih bagian atau bidang tujuan kunjungan.',

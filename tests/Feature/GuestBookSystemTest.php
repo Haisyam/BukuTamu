@@ -100,7 +100,59 @@ class GuestBookSystemTest extends TestCase
 
         $created = GuestLog::where('phone', '081233445566')->first();
         $this->assertNotNull($created);
+        $this->assertNull($created->social_media_platform);
+        $this->assertNull($created->social_media_handle);
         Storage::disk('public')->assertExists($created->photo_path);
+    }
+
+    public function test_guest_can_submit_optional_social_media_and_lookup_does_not_autofill_it(): void
+    {
+        $fakeBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
+        $response = $this->postJson(route('guestbook.store'), [
+            'name' => 'Rina Kartika',
+            'phone' => '081299887766',
+            'social_media_platform' => 'tiktok',
+            'social_media_handle' => 'rinakartika',
+            'institution' => 'Komunitas Kreatif',
+            'division_id' => $this->division->id,
+            'purpose' => 'Diskusi kolaborasi konten',
+            'photo' => $fakeBase64,
+        ]);
+
+        $response->assertStatus(200)->assertJson(['success' => true]);
+
+        $this->assertDatabaseHas('guest_logs', [
+            'phone' => '081299887766',
+            'social_media_platform' => 'tiktok',
+            'social_media_handle' => '@rinakartika',
+        ]);
+
+        // Lookup must NOT autofill social media
+        $lookup = $this->getJson(route('guestbook.lookup', ['phone' => '081299887766']));
+        $lookup->assertStatus(200)
+            ->assertJsonMissingPath('data.social_media_platform')
+            ->assertJsonMissingPath('data.social_media_handle');
+
+        // Admin can update social media
+        $created = GuestLog::where('phone', '081299887766')->firstOrFail();
+        $this->actingAs($this->admin)
+            ->put(route('admin.guest-logs.update', $created), [
+                'name' => 'Rina Kartika',
+                'phone' => '081299887766',
+                'social_media_platform' => 'youtube',
+                'social_media_handle' => '@rinachannel',
+                'institution' => 'Komunitas Kreatif',
+                'division_id' => $this->division->id,
+                'purpose' => 'Diskusi kolaborasi konten',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('guest_logs', [
+            'id' => $created->id,
+            'social_media_platform' => 'youtube',
+            'social_media_handle' => '@rinachannel',
+        ]);
     }
 
     public function test_admin_can_login_and_access_dashboard(): void

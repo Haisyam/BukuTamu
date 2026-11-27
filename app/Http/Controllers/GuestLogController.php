@@ -25,12 +25,13 @@ class GuestLogController extends Controller
     {
         $query = GuestLog::with('division')->latest('id');
 
-        // Filter: Keyword search (name, phone, institution, person_to_meet)
+        // Filter: Keyword search (name, phone, social_media_handle, institution, person_to_meet)
         if ($request->filled('q')) {
             $keyword = trim((string) $request->query('q'));
             $query->where(function ($sub) use ($keyword) {
                 $sub->where('name', 'like', "%{$keyword}%")
                     ->orWhere('phone', 'like', "%{$keyword}%")
+                    ->orWhere('social_media_handle', 'like', "%{$keyword}%")
                     ->orWhere('institution', 'like', "%{$keyword}%")
                     ->orWhere('person_to_meet', 'like', "%{$keyword}%")
                     ->orWhere('purpose', 'like', "%{$keyword}%");
@@ -69,6 +70,10 @@ class GuestLogController extends Controller
                 'id' => $guestLog->id,
                 'name' => $guestLog->name,
                 'phone' => $guestLog->phone,
+                'social_media_platform' => $guestLog->social_media_platform,
+                'social_media_platform_label' => $guestLog->social_media_platform_label,
+                'social_media_handle' => $guestLog->social_media_handle,
+                'social_media_url' => $guestLog->social_media_url,
                 'institution' => $guestLog->institution,
                 'division_name' => $guestLog->division ? $guestLog->division->name : '-',
                 'person_to_meet' => $guestLog->person_to_meet ?: '-',
@@ -88,6 +93,8 @@ class GuestLogController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:25'],
+            'social_media_platform' => ['nullable', 'string', 'in:instagram,tiktok,youtube'],
+            'social_media_handle' => ['nullable', 'string', 'max:100'],
             'institution' => ['required', 'string', 'max:150'],
             'division_id' => ['required', 'exists:divisions,id'],
             'person_to_meet' => ['nullable', 'string', 'max:150'],
@@ -95,14 +102,23 @@ class GuestLogController extends Controller
         ], [
             'name.required' => 'Nama lengkap tamu wajib diisi.',
             'phone.required' => 'Nomor HP wajib diisi.',
+            'social_media_platform.in' => 'Platform sosial media harus berupa Instagram, TikTok, atau YouTube.',
+            'social_media_handle.max' => 'Username sosial media maksimal 100 karakter.',
             'institution.required' => 'Asal instansi wajib diisi.',
             'division_id.required' => 'Silakan pilih bagian/bidang tujuan.',
             'purpose.required' => 'Keperluan kunjungan wajib diisi.',
         ]);
 
+        $socialMedia = GuestLog::normalizeSocialMedia(
+            $validated['social_media_platform'] ?? null,
+            $validated['social_media_handle'] ?? null
+        );
+
         $guestLog->update([
             'name' => strip_tags(trim($validated['name'])),
             'phone' => preg_replace('/[^0-9+\-\s]/', '', trim($validated['phone'])),
+            'social_media_platform' => $socialMedia['platform'],
+            'social_media_handle' => $socialMedia['handle'],
             'institution' => strip_tags(trim($validated['institution'])),
             'division_id' => $validated['division_id'],
             'person_to_meet' => !empty($validated['person_to_meet']) ? strip_tags(trim($validated['person_to_meet'])) : null,
@@ -217,6 +233,7 @@ class GuestLogController extends Controller
                 'Jam Kunjungan',
                 'Nama Lengkap Tamu',
                 'Nomor WhatsApp / HP',
+                'Sosial Media',
                 'Asal Instansi / Alamat',
                 'Bagian / Bidang Tujuan',
                 'Pejabat / Staf Yang Ditemui',
@@ -232,6 +249,7 @@ class GuestLogController extends Controller
                     substr((string) $g->visit_time, 0, 5) . ' WIB',
                     $g->name,
                     "'" . $g->phone, // Prefix with apostrophe to prevent Excel dropping leading zero
+                    $g->social_media_display ?: '-',
                     $g->institution,
                     $g->division ? $g->division->name : '-',
                     $g->person_to_meet ?: '-',

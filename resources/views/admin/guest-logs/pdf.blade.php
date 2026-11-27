@@ -230,6 +230,9 @@
                     <td>
                         <strong>{{ $g->name }}</strong><br>
                         <span style="font-size: 7.5pt; color: #0284c7;">{{ $g->phone }}</span>
+                        @if($g->social_media_display)
+                            <br><span style="font-size: 7pt; color: #475569;">{{ $g->social_media_display }}</span>
+                        @endif
                     </td>
                     <td>{{ $g->institution }}</td>
                     <td>

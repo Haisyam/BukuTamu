@@ -74,7 +74,7 @@
                         id="q" 
                         name="q" 
                         value="{{ request('q') }}" 
-                        placeholder="Cari nama, instansi, atau keperluan..." 
+                        placeholder="Cari nama, HP, sosmed, instansi, atau keperluan..." 
                         class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10"
                     />
                 </div>
@@ -167,6 +167,10 @@
                                         'id' => $guest->id,
                                         'name' => $guest->name,
                                         'phone' => $guest->phone,
+                                        'social_media_platform' => $guest->social_media_platform,
+                                        'social_media_platform_label' => $guest->social_media_platform_label,
+                                        'social_media_handle' => $guest->social_media_handle,
+                                        'social_media_url' => $guest->social_media_url,
                                         'institution' => $guest->institution,
                                         'division_name' => $guest->division ? $guest->division->name : '-',
                                         'person_to_meet' => $guest->person_to_meet,
@@ -195,13 +199,32 @@
                                 <p class="text-[11px] text-slate-400 font-mono mt-0.5">{{ substr($guest->visit_time, 0, 5) }} WIB</p>
                             </td>
 
-                            <!-- Guest Name & Phone -->
+                            <!-- Guest Name, Phone & Social Media -->
                             <td class="py-3 px-4">
                                 <p class="font-black text-slate-900 dark:text-white">{{ $guest->name }}</p>
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $guest->phone) }}" target="_blank" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold hover:underline flex items-center gap-1 mt-0.5">
                                     <span>{{ $guest->phone }}</span>
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                 </a>
+                                @if($guest->social_media_handle)
+                                    @php
+                                        $socialBadgeClass = match ($guest->social_media_platform) {
+                                            'instagram' => 'bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950/50 dark:text-pink-300 dark:border-pink-800/70',
+                                            'tiktok' => 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700',
+                                            'youtube' => 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800/70',
+                                            default => 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+                                        };
+                                    @endphp
+                                    <a
+                                        href="{{ $guest->social_media_url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold border hover:opacity-80 transition {{ $socialBadgeClass }}"
+                                    >
+                                        <span>{{ $guest->social_media_platform_label }}:</span>
+                                        <span>{{ $guest->social_media_handle }}</span>
+                                    </a>
+                                @endif
                             </td>
 
                             <!-- Institution -->
@@ -234,6 +257,10 @@
                                             'id' => $guest->id,
                                             'name' => $guest->name,
                                             'phone' => $guest->phone,
+                                            'social_media_platform' => $guest->social_media_platform,
+                                            'social_media_platform_label' => $guest->social_media_platform_label,
+                                            'social_media_handle' => $guest->social_media_handle,
+                                            'social_media_url' => $guest->social_media_url,
                                             'institution' => $guest->institution,
                                             'division_name' => $guest->division ? $guest->division->name : '-',
                                             'person_to_meet' => $guest->person_to_meet,
@@ -255,6 +282,8 @@
                                             'id' => $guest->id,
                                             'name' => $guest->name,
                                             'phone' => $guest->phone,
+                                            'social_media_platform' => $guest->social_media_platform ?: 'instagram',
+                                            'social_media_handle' => $guest->social_media_handle ?: '',
                                             'institution' => $guest->institution,
                                             'division_id' => $guest->division_id,
                                             'person_to_meet' => $guest->person_to_meet,
@@ -347,9 +376,28 @@
                         </div>
                     </div>
 
-                    <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
-                        <span class="text-[10px] font-extrabold text-slate-400 uppercase">Asal Instansi / Alamat</span>
-                        <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="activeGuest.institution"></p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
+                            <span class="text-[10px] font-extrabold text-slate-400 uppercase">Asal Instansi / Alamat</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="activeGuest.institution"></p>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
+                            <span class="text-[10px] font-extrabold text-slate-400 uppercase">Sosial Media</span>
+                            <template x-if="activeGuest.social_media_handle">
+                                <a
+                                    :href="activeGuest.social_media_url"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-1 font-bold text-orange-600 dark:text-orange-400 hover:underline mt-0.5 break-all"
+                                >
+                                    <span x-text="(activeGuest.social_media_platform_label ? activeGuest.social_media_platform_label + ': ' : '') + activeGuest.social_media_handle"></span>
+                                    <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </a>
+                            </template>
+                            <template x-if="!activeGuest.social_media_handle">
+                                <p class="font-bold text-slate-400 mt-0.5">-</p>
+                            </template>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -423,6 +471,20 @@
                                     <option value="{{ $div->id }}">{{ $div->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                            Sosial Media <span class="text-slate-400 font-normal lowercase">(opsional)</span>
+                        </label>
+                        <div class="flex items-stretch rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 overflow-hidden focus-within:border-orange-500">
+                            <select name="social_media_platform" x-model="editGuest.social_media_platform" class="px-2.5 py-2 bg-slate-100/80 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200 focus:outline-none">
+                                <option value="instagram">Instagram</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="youtube">YouTube</option>
+                            </select>
+                            <input type="text" name="social_media_handle" x-model="editGuest.social_media_handle" maxlength="100" placeholder="@username" class="w-full px-3 py-2 bg-transparent focus:outline-none" />
                         </div>
                     </div>
 
