@@ -153,6 +153,20 @@ class GuestBookSystemTest extends TestCase
             'social_media_platform' => 'youtube',
             'social_media_handle' => '@rinachannel',
         ]);
+
+        // Guest can submit WITHOUT selecting a division (division is optional)
+        $noDivRes = $this->postJson(route('guestbook.store'), [
+            'name' => 'Budi Santoso',
+            'phone' => '081211223344',
+            'institution' => 'Umum',
+            'purpose' => 'Kunjungan informasi layanan',
+            'photo' => $fakeBase64,
+        ]);
+        $noDivRes->assertStatus(200)->assertJson(['success' => true]);
+        $this->assertDatabaseHas('guest_logs', [
+            'phone' => '081211223344',
+            'division_id' => null,
+        ]);
     }
 
     public function test_admin_can_login_and_access_dashboard(): void
@@ -188,12 +202,16 @@ class GuestBookSystemTest extends TestCase
         $this->assertEquals('application/pdf', $response->headers->get('Content-Type'));
     }
 
-    public function test_admin_can_export_excel_csv(): void
+    public function test_admin_can_export_excel_xlsx(): void
     {
         $response = $this->actingAs($this->admin)->get(route('admin.guest-logs.export.excel'));
 
         $response->assertStatus(200);
-        $this->assertStringContainsString('text/csv', (string) $response->headers->get('Content-Type'));
+        $this->assertStringContainsString(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            (string) $response->headers->get('Content-Type')
+        );
+        $this->assertStringContainsString('.xlsx', (string) $response->headers->get('Content-Disposition'));
     }
 
     public function test_admin_can_manage_divisions_crud(): void

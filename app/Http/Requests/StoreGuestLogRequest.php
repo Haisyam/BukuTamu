@@ -29,7 +29,7 @@ class StoreGuestLogRequest extends FormRequest
             'social_media_platform' => ['nullable', 'string', 'in:instagram,tiktok,youtube'],
             'social_media_handle' => ['nullable', 'string', 'max:100'],
             'institution' => ['required', 'string', 'max:150'],
-            'division_id' => ['required', 'exists:divisions,id'],
+            'division_id' => ['nullable', 'exists:divisions,id'],
             'person_to_meet' => ['nullable', 'string', 'max:150'],
             'purpose' => ['required', 'string', 'max:2000'],
             'photo' => ['required', 'string'],

@@ -84,7 +84,7 @@ class GuestBookController extends Controller
 
         // Security check 3: Sanitize all string fields against HTML/script injection
         $guestLog = GuestLog::create([
-            'division_id' => $validated['division_id'],
+            'division_id' => !empty($validated['division_id']) ? $validated['division_id'] : null,
             'name' => strip_tags(trim($validated['name'])),
             'phone' => preg_replace('/[^0-9+\-\s]/', '', trim($validated['phone'])),
             'social_media_platform' => $socialMedia['platform'],

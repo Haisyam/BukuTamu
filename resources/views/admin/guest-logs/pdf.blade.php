@@ -117,36 +117,15 @@
             margin: 0 auto;
         }
 
-        /* Signature Section */
-        .signature-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            page-break-inside: avoid;
-        }
-        .signature-col-left {
-            width: 60%;
-            vertical-align: top;
+        /* Footer Note */
+        .report-note {
+            margin-top: 12px;
             font-size: 8.5pt;
             color: #64748b;
+            page-break-inside: avoid;
         }
-        .signature-col-right {
-            width: 40%;
-            vertical-align: top;
-            text-align: center;
-            font-size: 9.5pt;
-        }
-        .signature-space {
-            height: 65px;
-        }
-        .signature-name {
-            font-weight: bold;
-            text-decoration: underline;
-            color: #0f172a;
-        }
-        .signature-nip {
-            font-size: 8.5pt;
-            color: #475569;
+        .report-note p {
+            margin: 2px 0;
         }
     </style>
 </head>
@@ -253,22 +232,11 @@
         </tbody>
     </table>
 
-    <!-- SIGNATURE BLOCK -->
-    <table class="signature-table">
-        <tr>
-            <td class="signature-col-left">
-                <p><strong>Catatan:</strong></p>
-                <p>Dokumen ini merupakan rekaman data kunjungan tamu digital resmi yang dicatat melalui modul Kiosk Buku Tamu Digital Pelayanan Ekraf Majalengka.</p>
-            </td>
-            <td class="signature-col-right">
-                <p>Majalengka, {{ $todayDateIndo }}</p>
-                <p style="font-weight: bold; margin-top: 4px;">Kepala Bagian Pelayanan & Sekretariat,</p>
-                <div class="signature-space"></div>
-                <p class="signature-name">DR. H. ARIS MUNANDAR, M.Si.</p>
-                <p class="signature-nip">NIP. 19780812 200501 1 009</p>
-            </td>
-        </tr>
-    </table>
+    <!-- FOOTER NOTE -->
+    <div class="report-note">
+        <p><strong>Catatan:</strong></p>
+        <p>Dokumen ini merupakan rekaman data kunjungan tamu digital resmi yang dicatat melalui modul Kiosk Buku Tamu Digital Pelayanan Ekraf Majalengka.</p>
+    </div>
 
 </body>
 </html>

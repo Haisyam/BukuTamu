@@ -285,7 +285,7 @@
                                             'social_media_platform' => $guest->social_media_platform ?: 'instagram',
                                             'social_media_handle' => $guest->social_media_handle ?: '',
                                             'institution' => $guest->institution,
-                                            'division_id' => $guest->division_id,
+                                            'division_id' => $guest->division_id ?: '',
                                             'person_to_meet' => $guest->person_to_meet,
                                             'purpose' => $guest->purpose,
                                             'update_url' => route('admin.guest-logs.update', $guest),
@@ -465,8 +465,11 @@
                             <input type="text" name="phone" x-model="editGuest.phone" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 font-mono" />
                         </div>
                         <div>
-                            <label class="block font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1">Tujuan Bagian</label>
-                            <select name="division_id" x-model="editGuest.division_id" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950">
+                            <label class="block font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                                Tujuan Bagian <span class="text-slate-400 font-normal lowercase">(opsional)</span>
+                            </label>
+                            <select name="division_id" x-model="editGuest.division_id" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950">
+                                <option value="">-- Tidak Dipilih --</option>
                                 @foreach($divisions as $div)
                                     <option value="{{ $div->id }}">{{ $div->name }}</option>
                                 @endforeach

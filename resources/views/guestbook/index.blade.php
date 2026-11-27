@@ -128,7 +128,7 @@
                 return;
             }
 
-            if (!this.formData.name || !this.formData.phone || !this.formData.institution || !this.formData.division_id || !this.formData.purpose) {
+            if (!this.formData.name || !this.formData.phone || !this.formData.institution || !this.formData.purpose) {
                 window.Swal.fire({
                     icon: 'warning',
                     title: 'Form Belum Lengkap',
@@ -541,7 +541,7 @@
                         <!-- Division Dropdown -->
                         <div>
                             <label for="division_id" class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                Tujuan Bagian / Bidang <span class="text-rose-500">*</span>
+                                Tujuan Bagian / Bidang <span class="text-slate-400 font-normal lowercase">(opsional)</span>
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -550,10 +550,9 @@
                                 <select 
                                     id="division_id" 
                                     x-model="formData.division_id"
-                                    required
                                     class="w-full pl-10 pr-8 min-h-[48px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all cursor-pointer appearance-none"
                                 >
-                                    <option value="" disabled selected>-- Pilih Bagian / Bidang --</option>
+                                    <option value="">-- Pilih Bagian / Bidang --</option>
                                     @foreach($divisions as $division)
                                         <option value="{{ $division->id }}">{{ $division->name }}</option>
                                     @endforeach
